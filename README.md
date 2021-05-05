@@ -4,13 +4,13 @@
 
 ## cxxplgrconv
 ```
-$ echo ">anthr^opos" | plgrconv
+$ echo ">anthr^opos" | cxxplgrconv
 ἄνθρωπος
 ```
 
 ## cxxplgrcoll
 ```
-$ cat alpha.txt | plgrconv | plgrcoll
+$ cat alpha.txt | cxxplgrconv | cxxplgrcoll
 Πάντες
 ἄνθρωποι
 τοῦ
