@@ -1,9 +1,6 @@
-.PHONY: init
-init:
-	test -d ./bin || mkdir ./bin
-
 .PHONY: clean
 clean:
+	test -d ./bin || mkdir ./bin
 	rm -fR ./bin/*
 
 bin/char_mapping.o:
@@ -44,8 +41,6 @@ build: bin/libcxxplgr1.so
 
 .PHONY: install
 install: include/cxxplgr/primary.hpp bin/libcxxplgr1.so
-	test -n ${INSTALL_DIR} || INSTALL_DIR="${HOME}/.local"
-	test -d ${INSTALL_DIR}/lib || mkdir ${INSTALL_DIR}/lib
-	test -d ${INSTALL_DIR}/include/cxxplgr || mkdir ${INSTALL_DIR}/include/cxxplgr
+	test -z ${INSTALL_DIR} || test -d ${INSTALL_DIR}/include/cxxplgr || mkdir ${INSTALL_DIR}/include/cxxplgr
 	cp ./bin/libcxxplgr1.so ${INSTALL_DIR}/lib
 	cp ./include/cxxplgr/primary.hpp ${INSTALL_DIR}/include/cxxplgr/

@@ -1,9 +1,6 @@
-.PHONY: init
-init:
-	test -d ./bin || mkdir ./bin
-
 .PHONY: clean
 clean:
+	test -d ./bin || mkdir ./bin
 	rm -fR ./bin/*
 
 ./bin/cxxplgrconv: ./src/cli.cpp
@@ -18,5 +15,4 @@ build: ./bin/cxxplgrconv
 
 .PHONY: install
 install: build
-	! test -d ${INSTALL_DIR}/bin || cp ./bin/cxxplgrconv ${INSTALL_DIR}/bin
-
+	test -z ${INSTALL_DIR} || cp ./bin/cxxplgrconv ${INSTALL_DIR}/bin

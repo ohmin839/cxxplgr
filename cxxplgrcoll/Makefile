@@ -1,9 +1,6 @@
-.PHONY: init
-init:
-	test -d ./bin || mkdir ./bin
-
 .PHONY: clean
 clean:
+	test -d ./bin || mkdir ./bin
 	rm -fR ./bin/*
 
 bin/collector.o: include/cxxplgr/collector.hpp src/cxxplgr/collector.cpp
@@ -34,5 +31,4 @@ build: bin/cxxplgrcoll
 
 .PHONY: install
 install: build
-	! test -d ${INSTALL_DIR}/bin || cp ./bin/cxxplgrcoll ${INSTALL_DIR}/bin
-
+	test -z ${INSTALL_DIR} || cp ./bin/cxxplgrcoll ${INSTALL_DIR}/bin
