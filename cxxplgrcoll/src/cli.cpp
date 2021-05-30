@@ -23,7 +23,14 @@ int main(int argc, char** argv)
     else
     {
         const char* file = argv[1];
-        cxxplgr::collector::db_exec(file, words);
+        try
+        {
+            cxxplgr::collector::db_exec(file, words);
+        }
+        catch (int err)
+        {
+            std::cerr << "Error throwed from SQLite: " << err << std::endl;
+        }
     }
     return 0;
 }
