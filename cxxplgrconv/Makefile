@@ -8,7 +8,7 @@ clean:
 		-std=c++17 \
 		-o./bin/cxxplgrconv \
 		./src/cli.cpp \
-		-L${HOME}/.local/lib -lcxxplgr1
+		-lcxxplgr1
 
 .PHONY: build
 build: ./bin/cxxplgrconv

@@ -23,7 +23,7 @@ bin/cxxplgrcoll: bin/collector.o bin/sqlite3.o src/cli.cpp
 		-I./include -fpermissive \
 		-o./bin/cxxplgrcoll \
 		./src/cli.cpp ./bin/*.o \
-		-L${HOME}/.local/lib -lcxxplgr2 \
+		-lcxxplgr2 \
 		-lsqlite3
 
 .PHONY: build
