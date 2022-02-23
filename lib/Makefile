@@ -3,6 +3,34 @@ clean:
 	test -d ./bin || mkdir ./bin
 	rm -fR ./bin/*
 
+
+bin/char_mapping.o:
+	g++ \
+ 		-std=c++17 \
+		-I./include \
+		-fPIC \
+		./src/cxxplgr/primary/char_mapping.cpp \
+		-c -o./bin/char_mapping.o
+
+bin/primary.o: bin/char_mapping.o
+	g++ \
+        -std=c++17 \
+        -I./include \
+		-fPIC \
+		./src/cxxplgr/primary.cpp \
+		-c -o./bin/primary.o
+
+bin/test_to_polytonic: bin/primary.o test/test_to_polytonic.cpp
+	g++ \
+		-std=c++17 \
+		-I./include \
+		-fPIC \
+		./bin/primary.o \
+		./src/cxxplgr/primary/char_mapping.cpp \
+		./test/test_to_polytonic.cpp \
+		-o./bin/test_to_polytonic
+
+
 bin/accent.o:
 	g++ \
 		-std=c++17 \
@@ -59,6 +87,7 @@ bin/secondary.o: bin/accent.o bin/breath.o bin/case.o bin/dialesis.o bin/iota.o 
 		-fPIC \
 		-c -o./bin/secondary.o \
 		./src/cxxplgr/secondary.cpp
+
 
 bin/test_split_into_words: test/test_split_into_words.cpp bin/secondary.o include/cxxplgr/secondary/grammar.hpp include/cxxplgr/secondary/action.hpp
 	g++ \
@@ -180,8 +209,10 @@ bin/test_to_sortable: test/test_to_sortable.cpp bin/secondary.o
 		./test/test_to_sortable.cpp \
 		-o./bin/test_to_sortable
 
+
 .PHONY: test
-test: bin/test_split_into_words bin/test_without_accent bin/test_without_breath bin/test_to_lower bin/test_to_upper bin/test_without_dialesis bin/test_without_iota_subscriptum bin/test_to_sortable
+test: bin/test_to_polytonic bin/test_split_into_words bin/test_without_accent bin/test_without_breath bin/test_to_lower bin/test_to_upper bin/test_without_dialesis bin/test_without_iota_subscriptum bin/test_to_sortable
+	./bin/test_to_polytonic
 	./bin/test_split_into_words
 	./bin/test_without_accent
 	./bin/test_without_breath
@@ -191,15 +222,16 @@ test: bin/test_split_into_words bin/test_without_accent bin/test_without_breath 
 	./bin/test_without_iota_subscriptum
 	./bin/test_to_sortable
 
-bin/libcxxplgr2.so: bin/secondary.o
-	g++ -shared -fPIC -o./bin/libcxxplgr2.so ./bin/*.o
+bin/libcxxplgr.so: bin/primary.o bin/secondary.o
+	g++ -shared -fPIC -o./bin/libcxxplgr.so ./bin/*.o
 
 .PHONY: build
-build: bin/libcxxplgr2.so
+build: bin/libcxxplgr.so
 
 .PHONY: install
-install: include/cxxplgr/secondary.hpp bin/libcxxplgr2.so
+install: include/cxxplgr/primary.hpp include/cxxplgr/secondary.hpp bin/libcxxplgr.so
 	test -z ${INSTALL_DIR} || test -d ${INSTALL_DIR}/include/cxxplgr || mkdir ${INSTALL_DIR}/include/cxxplgr
-	cp ./bin/libcxxplgr2.so ${INSTALL_DIR}/lib
+	cp ./bin/libcxxplgr.so ${INSTALL_DIR}/lib
+	cp ./include/cxxplgr/primary.hpp ${INSTALL_DIR}/include/cxxplgr/
 	cp ./include/cxxplgr/secondary.hpp ${INSTALL_DIR}/include/cxxplgr/
 
