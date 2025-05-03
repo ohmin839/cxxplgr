@@ -7,32 +7,36 @@ clean:
 bin/cxxplgrconv: src/converter/cli.cpp
 	g++  \
 		-std=c++17 \
+		-I../lib/include \
 		-obin/cxxplgrconv \
 		src/converter/cli.cpp \
-		-lcxxplgr
+		../lib/bin/libcxxplgr.so
 
 
 bin/collector.o: include/cxxplgr/collector.hpp src/collector/cxxplgr/collector.cpp
 	g++ \
 		-std=c++17 \
-		-I./include -fpermissive \
+		-I./include -I../lib/include \
+		-fpermissive \
 		-c -obin/collector.o \
 		src/collector/cxxplgr/collector.cpp
 
 bin/sqlite3.o: include/cxxplgr/sqlite3.hpp src/collector/cxxplgr/sqlite3.cpp
 	g++ \
 		-std=c++17 \
-		-Iinclude -fpermissive \
+		-I./include -I../lib/include \
+		-fpermissive \
 		-c -obin/sqlite3.o \
 		src/collector/cxxplgr/sqlite3.cpp
 
 bin/cxxplgrcoll: bin/collector.o bin/sqlite3.o src/collector/cli.cpp
 	g++ \
 		-std=c++17 \
-		-Iinclude -fpermissive \
+		-I./include -I../lib/include \
+		-fpermissive \
 		-obin/cxxplgrcoll \
 		src/collector/cli.cpp bin/*.o \
-		-lcxxplgr \
+		../lib/bin/libcxxplgr.so \
 		-lsqlite3
 
 
